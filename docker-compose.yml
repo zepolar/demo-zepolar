@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+
+  challenge:
+    container_name: challenge-api
+    build:
+      context: .
+    ports:
+      - 8090:8090
+    networks:
+      - ontop
+    env_file:
+      - api.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+  db:
+    image: 'bitnami/postgresql:latest'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U challenge" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    env_file:
+      - db.env
+    volumes:
+      - db:/bitnami/postgresql
+    networks:
+      - ontop
+
+  db-client:
+    image: adminer
+    container_name: adminer_client
+    ports:
+      - 8080:8080
+    networks:
+      - ontop
+
+volumes:
+  db:
+
+networks:
+  ontop:
