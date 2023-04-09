@@ -38,13 +38,8 @@ public class TransactionController {
     })
     @PostMapping("/transactions")
     public ResponseEntity<?> update(@RequestBody TransactionRequest transactionRequest){
-        try {
             this.transactionService.applyChanges(transactionRequest);
             return ResponseEntity.ok("Transaction is ok");
-        }
-        catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @GetMapping(path = "/transactions")

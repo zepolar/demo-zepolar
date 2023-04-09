@@ -5,7 +5,7 @@ import com.zepolar.demo.entity.Transaction;
 import com.zepolar.demo.entity.enumeration.EnumStatus;
 import com.zepolar.demo.entity.enumeration.EnumTypeOperation;
 import com.zepolar.demo.entity.log.PaymentLog;
-import com.zepolar.demo.exception.TransactionException;
+import com.zepolar.demo.service.exception.AccountNotFoundException;
 import com.zepolar.demo.payment.PaymentAPI;
 import com.zepolar.demo.payment.request.*;
 import com.zepolar.demo.payment.response.PaymentResponse;
@@ -16,6 +16,7 @@ import com.zepolar.demo.repository.WalletLogRepository;
 import com.zepolar.demo.request.EnumCurrency;
 import com.zepolar.demo.request.TransactionRequest;
 import com.zepolar.demo.wallet.WalletAPI;
+import com.zepolar.demo.wallet.exception.WalletException;
 import com.zepolar.demo.wallet.request.WalletRequest;
 import com.zepolar.demo.wallet.response.BalanceResponse;
 import com.zepolar.demo.wallet.response.WalletResponse;
@@ -99,10 +100,10 @@ public class TransactionService {
                 transactionRepository.save(credit);
                 logger.info("<< Finish Saving Log >>");
             } else {
-                throw new TransactionException("No money");
+                throw new WalletException("No money to continue.");
             }
         } else {
-            throw new TransactionException("Something is wrong");
+            throw new AccountNotFoundException("No account was found");
         }
     }
 
